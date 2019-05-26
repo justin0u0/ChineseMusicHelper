@@ -47,9 +47,10 @@ for div in block.find_all("div"):
     d_url = url + div.a["href"]
     number = title[0:3]
     filename = title[3:].split(".")[-2]
-    breakpoint = filename.find("(") != -1 or filename.find("（")
-    race = filename[breakpoint + 1:filename.find("族") + 1]
-    d_file = "./assets/" + filename
+    startpoint = filename.find("(") if filename.find("(") != -1 else filename.find("（")
+    breakpoint = filename.find(")") if filename.find(")") != -1 else filename.find("）")
+    race = filename[startpoint + 1: breakpoint]
+    d_file = "./assets/" + filename + ".mp3"
     music = {
         "index": number,
         "race": race,
@@ -57,17 +58,21 @@ for div in block.find_all("div"):
         "url": d_file
     }
     musics.append(music)
-    
+   
+    """
     with requests.get(d_url, stream=True, cookies=r.cookies) as res:
         res.raise_for_status()
         with open(d_file, "wb") as f:
             for chunk in res.iter_content(chunk_size=8192):
                 if (chunk):
                     f.write(chunk)
+    """
 
     print ("done")
 
 print ("Finished, all mp3 files are stored in assets folder.")
-print (musics)
+
+with open("./music.json", "w", encoding='utf8') as f:
+    json.dump(musics, f, ensure_ascii=False)
 
 
