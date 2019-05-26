@@ -38,11 +38,10 @@ block = soup.find("div", class_="block")
 
 for div in block.find_all("div"):
     # print (div.a["href"])
-    print (div.a["title"])
+    print ("downloading ... " + div.a["title"])
     d_url = url + div.a["href"]
     d_file = div.a["title"]
     print (d_url)
-    print (r.cookies)
 
     with requests.get(d_url, stream=True, cookies=r.cookies) as res:
         res.raise_for_status()
@@ -50,8 +49,5 @@ for div in block.find_all("div"):
             for chunk in res.iter_content(chunk_size=8192):
                 if (chunk):
                     f.write(chunk)
-
-    break
-
 
 
