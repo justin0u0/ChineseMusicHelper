@@ -16,8 +16,10 @@ url = "https://lms.nthu.edu.tw"
 login_url = url + "/sys/lib/ajax/login_submit.php"
 login = r.get(login_url, params=user)
 login.encoding = 'utf-8'
-# print (login.url)
-# print (login.json())
+""" Debug
+print (login.url)
+print (login.json())
+"""
 
 course = None
 if login.json()["ret"]["status"] != "true":
@@ -37,11 +39,9 @@ soup = BeautifulSoup(course.text, "lxml")
 block = soup.find("div", class_="block")
 
 for div in block.find_all("div"):
-    # print (div.a["href"])
     print ("downloading ... " + div.a["title"])
     d_url = url + div.a["href"]
-    d_file = div.a["title"]
-    print (d_url)
+    d_file = "./assets/" + div.a["title"]
 
     with requests.get(d_url, stream=True, cookies=r.cookies) as res:
         res.raise_for_status()
@@ -49,5 +49,10 @@ for div in block.find_all("div"):
             for chunk in res.iter_content(chunk_size=8192):
                 if (chunk):
                     f.write(chunk)
+
+    print ("done")
+
+print ("Finished, all mp3 files are stored in assets folder.")
+
 
 
