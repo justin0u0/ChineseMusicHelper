@@ -59,14 +59,12 @@ for div in block.find_all("div"):
     }
     musics.append(music)
    
-    """
     with requests.get(d_url, stream=True, cookies=r.cookies) as res:
         res.raise_for_status()
         with open(d_file, "wb") as f:
             for chunk in res.iter_content(chunk_size=8192):
                 if (chunk):
                     f.write(chunk)
-    """
 
     print ("done")
 
